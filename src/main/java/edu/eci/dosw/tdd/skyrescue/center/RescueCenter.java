@@ -79,9 +79,13 @@ public class RescueCenter {
         String droneId,
         String location,
         int distanceKm) {
-            
+
     RescueOperator operator = findOperator(operatorId);
     Drone drone = drones.get(droneId);
+
+    if (drone == null) {
+        throw new IllegalArgumentException("Drone does not exist: " + droneId);
+    }
 
     Mission mission = new Mission(
             generateMissionId(),
