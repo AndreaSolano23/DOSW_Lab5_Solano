@@ -160,16 +160,20 @@ private void validateAssignment(
     
     public Mission completeMission(String missionId) {
         Mission mission = findMission(missionId);
-        
         if (mission == null) {
             throw new IllegalArgumentException("Mission does not exist: " + missionId);
         }
+        if (mission.getStatus() == MissionStatus.COMPLETED) {
+            throw new IllegalStateException("Mission is already completed: " + missionId);
+        }
+        
         mission.setStatus(MissionStatus.COMPLETED);
         mission.setEndDate(LocalDateTime.now());
         mission.getDrone().setAvailable(true);
+        
         return mission;
     }
-    
+
     private Mission findMission(String missionId) {
         return missions.stream()
             .filter(m -> m.getId().equals(missionId))
