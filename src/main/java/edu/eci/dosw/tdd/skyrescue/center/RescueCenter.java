@@ -83,6 +83,30 @@ public class RescueCenter {
     RescueOperator operator = findOperator(operatorId);
     Drone drone = drones.get(droneId);
 
+    validateAssignment(operator, operatorId, drone, droneId, distanceKm);
+
+    Mission mission = new Mission(
+            generateMissionId(),
+            location,
+            distanceKm,
+            drone,
+            operator,
+            LocalDateTime.now(),
+            MissionStatus.ACTIVE);
+
+    drone.setAvailable(false);
+    missions.add(mission);
+
+    return mission;
+}
+
+private void validateAssignment(
+        RescueOperator operator,
+        String operatorId,
+        Drone drone,
+        String droneId,
+        int distanceKm) {
+
     if (operator == null) {
         throw new IllegalArgumentException("Operator does not exist: " + operatorId);
     }
@@ -98,20 +122,7 @@ public class RescueCenter {
     if (hasActiveMission(operatorId)) {
         throw new IllegalStateException("Operator already has an active mission: " + operatorId);
     }
-
-    Mission mission = new Mission(
-            generateMissionId(),
-            location,
-            distanceKm,
-            drone,
-            operator,
-            LocalDateTime.now(),
-            MissionStatus.ACTIVE);
-
-    drone.setAvailable(false);
-    missions.add(mission);
-
-    return mission;}
+}
 
     private boolean hasActiveMission(String operatorId) {
         return missions.stream()
