@@ -40,6 +40,9 @@ public class RescueCenter {
     if (drone == null) {
         return false;
     }
+    if (drone.getId() == null || drone.getId().isBlank()) {
+        return false;
+    }
     drones.put(drone.getId(), drone);
     return true;
 }
