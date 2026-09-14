@@ -101,4 +101,13 @@ class RescueCenterTest {
         assertThrows(IllegalArgumentException.class, () ->
         center.assignMission("O1", "D1", "Far Zone", 100));
     }
+
+    @Test
+    void shouldThrowExceptionWhenOperatorDoesNotExist() {
+        RescueCenter center = new RescueCenter();
+        Drone drone = new Drone("D1", "Falcon", 50);
+        center.addDrone(drone);
+        assertThrows(IllegalArgumentException.class, () ->
+        center.assignMission("O-NOT-EXIST", "D1", "Downtown", 30));
+    }
 }
