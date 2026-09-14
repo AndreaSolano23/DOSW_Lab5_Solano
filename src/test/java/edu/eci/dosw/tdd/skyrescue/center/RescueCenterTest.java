@@ -163,4 +163,23 @@ class RescueCenterTest {
         assertThrows(IllegalStateException.class, () ->
         center.completeMission(mission.getId()));
     }
+
+    @Test
+    void shouldNotAffectOtherActiveMissionWhenCompletingOne() {
+        RescueCenter center = new RescueCenter();
+        Drone drone1 = new Drone("D1", "Falcon", 50);
+        Drone drone2 = new Drone("D2", "Phantom", 40);
+        RescueOperator operator1 = new RescueOperator("O1", "Ana");
+        RescueOperator operator2 = new RescueOperator("O2", "Luis");
+        center.addDrone(drone1);
+        center.addDrone(drone2);
+        center.addOperator(operator1);
+        center.addOperator(operator2);
+        Mission mission1 = center.assignMission("O1", "D1", "Downtown", 30);
+        Mission mission2 = center.assignMission("O2", "D2", "Uptown", 20);
+        center.completeMission(mission1.getId());
+        
+        assertEquals(MissionStatus.ACTIVE, mission2.getStatus());
+        assertFalse(drone2.isAvailable());
+    }
 }
