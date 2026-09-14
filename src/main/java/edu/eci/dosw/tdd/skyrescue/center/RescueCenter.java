@@ -83,6 +83,9 @@ public class RescueCenter {
     RescueOperator operator = findOperator(operatorId);
     Drone drone = drones.get(droneId);
 
+    if (operator == null) {
+        throw new IllegalArgumentException("Operator does not exist: " + operatorId);
+    }
     if (drone == null) {
         throw new IllegalArgumentException("Drone does not exist: " + droneId);
     }
@@ -106,7 +109,7 @@ public class RescueCenter {
     missions.add(mission);
 
     return mission;}
-
+    
     private RescueOperator findOperator(String operatorId) {
     return operators.stream()
             .filter(op -> op.getId().equals(operatorId))
