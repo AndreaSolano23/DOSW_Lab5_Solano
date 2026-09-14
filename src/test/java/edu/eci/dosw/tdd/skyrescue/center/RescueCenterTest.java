@@ -149,4 +149,18 @@ class RescueCenterTest {
         assertThrows(IllegalArgumentException.class, () ->
         center.completeMission("M-NOT-EXIST"));
     }
+
+    @Test
+    void shouldThrowExceptionWhenCompletingMissionTwice() {
+        RescueCenter center = new RescueCenter();
+        Drone drone = new Drone("D1", "Falcon", 50);
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addDrone(drone);
+        center.addOperator(operator);
+        Mission mission = center.assignMission("O1", "D1", "Downtown", 30);
+        center.completeMission(mission.getId());
+        
+        assertThrows(IllegalStateException.class, () ->
+        center.completeMission(mission.getId()));
+    }
 }
