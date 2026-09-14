@@ -37,18 +37,15 @@ public class RescueCenter {
      * @return true if it was registered; false otherwise.
      */
    public boolean addDrone(Drone drone) {
-    if (drone == null) {
+    if (isInvalid(drone) || drones.containsKey(drone.getId())) {
         return false;
-    }
-    if (drone.getId() == null || drone.getId().isBlank()) {
-        return false;
-    }
-    if (drones.containsKey(drone.getId())){
-        return false; 
     }
     drones.put(drone.getId(), drone);
-    return true;
-}
+    return true;}
+    
+    private boolean isInvalid(Drone drone) {
+        return drone == null || drone.getId() == null || drone.getId().isBlank();
+    }
 
     /**
      * Assigns an emergency mission to an operator and an available drone.
