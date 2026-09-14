@@ -89,4 +89,16 @@ class RescueCenterTest {
         assertThrows(IllegalStateException.class, () ->
         center.assignMission("O2", "D1", "Uptown", 20));
     }
+
+    @Test
+    void shouldThrowExceptionWhenDistanceExceedsDroneRange() {
+        RescueCenter center = new RescueCenter();
+        Drone drone = new Drone("D1", "Falcon", 50);
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addDrone(drone);
+        center.addOperator(operator);
+        
+        assertThrows(IllegalArgumentException.class, () ->
+        center.assignMission("O1", "D1", "Far Zone", 100));
+    }
 }
