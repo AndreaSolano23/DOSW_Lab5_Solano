@@ -4,6 +4,7 @@ import edu.eci.dosw.tdd.skyrescue.drone.Drone;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class RescueCenterTest {
 
@@ -16,4 +17,12 @@ class RescueCenterTest {
 
         assertTrue(result);
     }
+
+    @Test
+    void shouldNotRegisterNullDrone() {
+    RescueCenter center = new RescueCenter();
+
+    boolean result = center.addDrone(null);
+
+    assertFalse(result);}
 }
