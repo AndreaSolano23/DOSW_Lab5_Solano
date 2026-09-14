@@ -89,6 +89,9 @@ public class RescueCenter {
     if (!drone.isAvailable()) {
         throw new IllegalStateException("Drone is already busy: " + droneId);
     }
+    if (distanceKm <= 0 || distanceKm > drone.getMaxRangeKm()) {
+        throw new IllegalArgumentException("Invalid distance for this drone: " + distanceKm);
+    }
 
     Mission mission = new Mission(
             generateMissionId(),
