@@ -5,7 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import edu.eci.dosw.tdd.skyrescue.mission.Mission;
+import edu.eci.dosw.tdd.skyrescue.mission.MissionStatus;
+import edu.eci.dosw.tdd.skyrescue.operator.RescueOperator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 class RescueCenterTest {
 
     @Test
@@ -45,4 +49,17 @@ class RescueCenterTest {
     boolean result = center.addDrone(secondDrone);
 
     assertFalse(result);}
+
+    @Test
+    void shouldAssignMissionWhenDataIsValid() {
+        RescueCenter center = new RescueCenter();
+        Drone drone = new Drone("D1", "Falcon", 50);
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addDrone(drone);
+        center.addOperator(operator);
+        
+        Mission mission = center.assignMission("O1", "D1", "Downtown", 30);
+        assertEquals(MissionStatus.ACTIVE, mission.getStatus());
+        assertFalse(drone.isAvailable());
+    }
 }
