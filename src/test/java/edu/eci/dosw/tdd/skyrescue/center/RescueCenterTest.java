@@ -10,6 +10,8 @@ import edu.eci.dosw.tdd.skyrescue.mission.MissionStatus;
 import edu.eci.dosw.tdd.skyrescue.operator.RescueOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class RescueCenterTest {
 
     @Test
@@ -61,5 +63,15 @@ class RescueCenterTest {
         Mission mission = center.assignMission("O1", "D1", "Downtown", 30);
         assertEquals(MissionStatus.ACTIVE, mission.getStatus());
         assertFalse(drone.isAvailable());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDroneDoesNotExist() {
+        RescueCenter center = new RescueCenter();
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addOperator(operator);
+        
+        assertThrows(IllegalArgumentException.class, () -> 
+        center.assignMission("O1", "D-NOT-EXIST", "Downtown", 30));
     }
 }
