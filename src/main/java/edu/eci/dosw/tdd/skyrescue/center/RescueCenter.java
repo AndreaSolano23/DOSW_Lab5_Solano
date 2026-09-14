@@ -95,6 +95,9 @@ public class RescueCenter {
     if (distanceKm <= 0 || distanceKm > drone.getMaxRangeKm()) {
         throw new IllegalArgumentException("Invalid distance for this drone: " + distanceKm);
     }
+    if (hasActiveMission(operatorId)) {
+        throw new IllegalStateException("Operator already has an active mission: " + operatorId);
+    }
 
     Mission mission = new Mission(
             generateMissionId(),
@@ -109,7 +112,12 @@ public class RescueCenter {
     missions.add(mission);
 
     return mission;}
-    
+
+    private boolean hasActiveMission(String operatorId) {
+        return missions.stream()
+        .anyMatch(m -> m.getOperator().getId().equals(operatorId) && m.getStatus() == MissionStatus.ACTIVE);
+    }
+
     private RescueOperator findOperator(String operatorId) {
     return operators.stream()
             .filter(op -> op.getId().equals(operatorId))
