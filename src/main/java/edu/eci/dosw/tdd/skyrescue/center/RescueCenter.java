@@ -3,11 +3,14 @@ package edu.eci.dosw.tdd.skyrescue.center;
 import edu.eci.dosw.tdd.skyrescue.drone.Drone;
 import edu.eci.dosw.tdd.skyrescue.mission.Mission;
 import edu.eci.dosw.tdd.skyrescue.operator.RescueOperator;
+import edu.eci.dosw.tdd.skyrescue.mission.MissionStatus;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 /**
  * Coordinates drones, operators and emergency missions.
@@ -72,12 +75,36 @@ public class RescueCenter {
      * @return created mission.
      */
     public Mission assignMission(
-            String operatorId,
-            String droneId,
-            String location,
-            int distanceKm) {
-        // TODO Implement using TDD.
-        return null;
+        String operatorId,
+        String droneId,
+        String location,
+        int distanceKm) {
+            
+    RescueOperator operator = findOperator(operatorId);
+    Drone drone = drones.get(droneId);
+
+    Mission mission = new Mission(
+            generateMissionId(),
+            location,
+            distanceKm,
+            drone,
+            operator,
+            LocalDateTime.now(),
+            MissionStatus.ACTIVE);
+
+    drone.setAvailable(false);
+    missions.add(mission);
+
+    return mission;}
+
+    private RescueOperator findOperator(String operatorId) {
+    return operators.stream()
+            .filter(op -> op.getId().equals(operatorId))
+            .findFirst()
+            .orElse(null);}
+            
+    private String generateMissionId() {
+        return "M" + (missions.size() + 1);
     }
 
     /**
