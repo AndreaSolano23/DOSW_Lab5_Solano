@@ -3,11 +3,14 @@ package edu.eci.dosw.tdd.skyrescue.center;
 import edu.eci.dosw.tdd.skyrescue.drone.Drone;
 import edu.eci.dosw.tdd.skyrescue.mission.Mission;
 import edu.eci.dosw.tdd.skyrescue.operator.RescueOperator;
+import edu.eci.dosw.tdd.skyrescue.mission.MissionStatus;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 /**
  * Coordinates drones, operators and emergency missions.
@@ -72,12 +75,68 @@ public class RescueCenter {
      * @return created mission.
      */
     public Mission assignMission(
-            String operatorId,
-            String droneId,
-            String location,
-            int distanceKm) {
-        // TODO Implement using TDD.
-        return null;
+        String operatorId,
+        String droneId,
+        String location,
+        int distanceKm) {
+
+    RescueOperator operator = findOperator(operatorId);
+    Drone drone = drones.get(droneId);
+
+    validateAssignment(operator, operatorId, drone, droneId, distanceKm);
+
+    Mission mission = new Mission(
+            generateMissionId(),
+            location,
+            distanceKm,
+            drone,
+            operator,
+            LocalDateTime.now(),
+            MissionStatus.ACTIVE);
+
+    drone.setAvailable(false);
+    missions.add(mission);
+
+    return mission;
+}
+
+private void validateAssignment(
+        RescueOperator operator,
+        String operatorId,
+        Drone drone,
+        String droneId,
+        int distanceKm) {
+
+    if (operator == null) {
+        throw new IllegalArgumentException("Operator does not exist: " + operatorId);
+    }
+    if (drone == null) {
+        throw new IllegalArgumentException("Drone does not exist: " + droneId);
+    }
+    if (!drone.isAvailable()) {
+        throw new IllegalStateException("Drone is already busy: " + droneId);
+    }
+    if (distanceKm <= 0 || distanceKm > drone.getMaxRangeKm()) {
+        throw new IllegalArgumentException("Invalid distance for this drone: " + distanceKm);
+    }
+    if (hasActiveMission(operatorId)) {
+        throw new IllegalStateException("Operator already has an active mission: " + operatorId);
+    }
+}
+
+    private boolean hasActiveMission(String operatorId) {
+        return missions.stream()
+        .anyMatch(m -> m.getOperator().getId().equals(operatorId) && m.getStatus() == MissionStatus.ACTIVE);
+    }
+
+    private RescueOperator findOperator(String operatorId) {
+    return operators.stream()
+            .filter(op -> op.getId().equals(operatorId))
+            .findFirst()
+            .orElse(null);}
+            
+    private String generateMissionId() {
+        return "M" + (missions.size() + 1);
     }
 
     /**
