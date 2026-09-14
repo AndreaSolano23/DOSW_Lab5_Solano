@@ -110,4 +110,19 @@ class RescueCenterTest {
         assertThrows(IllegalArgumentException.class, () ->
         center.assignMission("O-NOT-EXIST", "D1", "Downtown", 30));
     }
+
+    @Test
+    void shouldThrowExceptionWhenOperatorHasAnotherActiveMission() {
+        RescueCenter center = new RescueCenter();
+        Drone drone1 = new Drone("D1", "Falcon", 50);
+        Drone drone2 = new Drone("D2", "Phantom", 40);
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addDrone(drone1);
+        center.addDrone(drone2);
+        center.addOperator(operator);
+        center.assignMission("O1", "D1", "Downtown", 30);
+        
+        assertThrows(IllegalStateException.class, () ->
+        center.assignMission("O1", "D2", "Uptown", 20));
+    }
 }
