@@ -158,9 +158,19 @@ private void validateAssignment(
      * @return completed mission.
      */
     public Mission completeMission(String missionId) {
-        // TODO Implement using TDD.
-        return null;
-    }
+    Mission mission = findMission(missionId);
+
+    mission.setStatus(MissionStatus.COMPLETED);
+    mission.setEndDate(LocalDateTime.now());
+    mission.getDrone().setAvailable(true);
+
+    return mission;}
+
+    private Mission findMission(String missionId) {
+        return missions.stream()
+            .filter(m -> m.getId().equals(missionId))
+            .findFirst()
+            .orElse(null);}
 
     public boolean addOperator(RescueOperator operator) {
         return operators.add(operator);
