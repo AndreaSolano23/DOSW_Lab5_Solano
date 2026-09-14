@@ -34,4 +34,15 @@ class RescueCenterTest {
     boolean result = center.addDrone(drone);
 
     assertFalse(result);}
+
+    @Test
+    void shouldNotRegisterDroneWithDuplicateId() {
+    RescueCenter center = new RescueCenter();
+    Drone firstDrone = new Drone("D1", "Falcon", 50);
+    Drone secondDrone = new Drone("D1", "Phantom", 30);
+
+    center.addDrone(firstDrone);
+    boolean result = center.addDrone(secondDrone);
+
+    assertFalse(result);}
 }
