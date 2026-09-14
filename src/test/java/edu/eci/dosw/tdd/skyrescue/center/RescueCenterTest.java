@@ -142,4 +142,11 @@ class RescueCenterTest {
         assertNotNull(completed.getEndDate());
         assertTrue(drone.isAvailable());
     }
+
+    @Test
+    void shouldThrowExceptionWhenMissionDoesNotExist() {
+        RescueCenter center = new RescueCenter();
+        assertThrows(IllegalArgumentException.class, () ->
+        center.completeMission("M-NOT-EXIST"));
+    }
 }
