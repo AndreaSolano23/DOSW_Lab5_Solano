@@ -157,10 +157,28 @@ private void validateAssignment(
      * @param missionId mission identifier.
      * @return completed mission.
      */
+    
     public Mission completeMission(String missionId) {
-        // TODO Implement using TDD.
-        return null;
+        Mission mission = findMission(missionId);
+        if (mission == null) {
+            throw new IllegalArgumentException("Mission does not exist: " + missionId);
+        }
+        if (mission.getStatus() == MissionStatus.COMPLETED) {
+            throw new IllegalStateException("Mission is already completed: " + missionId);
+        }
+        
+        mission.setStatus(MissionStatus.COMPLETED);
+        mission.setEndDate(LocalDateTime.now());
+        mission.getDrone().setAvailable(true);
+        
+        return mission;
     }
+
+    private Mission findMission(String missionId) {
+        return missions.stream()
+            .filter(m -> m.getId().equals(missionId))
+            .findFirst()
+            .orElse(null);}
 
     public boolean addOperator(RescueOperator operator) {
         return operators.add(operator);

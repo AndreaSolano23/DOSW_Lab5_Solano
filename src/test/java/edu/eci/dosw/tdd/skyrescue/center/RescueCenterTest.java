@@ -11,6 +11,7 @@ import edu.eci.dosw.tdd.skyrescue.operator.RescueOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RescueCenterTest {
 
@@ -124,5 +125,61 @@ class RescueCenterTest {
         
         assertThrows(IllegalStateException.class, () ->
         center.assignMission("O1", "D2", "Uptown", 20));
+    }
+
+    @Test
+    void shouldCompleteActiveMission() {
+        RescueCenter center = new RescueCenter();
+        Drone drone = new Drone("D1", "Falcon", 50);
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addDrone(drone);
+        center.addOperator(operator);
+        Mission mission = center.assignMission("O1", "D1", "Downtown", 30);
+        
+        Mission completed = center.completeMission(mission.getId());
+        
+        assertEquals(MissionStatus.COMPLETED, completed.getStatus());
+        assertNotNull(completed.getEndDate());
+        assertTrue(drone.isAvailable());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenMissionDoesNotExist() {
+        RescueCenter center = new RescueCenter();
+        assertThrows(IllegalArgumentException.class, () ->
+        center.completeMission("M-NOT-EXIST"));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCompletingMissionTwice() {
+        RescueCenter center = new RescueCenter();
+        Drone drone = new Drone("D1", "Falcon", 50);
+        RescueOperator operator = new RescueOperator("O1", "Ana");
+        center.addDrone(drone);
+        center.addOperator(operator);
+        Mission mission = center.assignMission("O1", "D1", "Downtown", 30);
+        center.completeMission(mission.getId());
+        
+        assertThrows(IllegalStateException.class, () ->
+        center.completeMission(mission.getId()));
+    }
+
+    @Test
+    void shouldNotAffectOtherActiveMissionWhenCompletingOne() {
+        RescueCenter center = new RescueCenter();
+        Drone drone1 = new Drone("D1", "Falcon", 50);
+        Drone drone2 = new Drone("D2", "Phantom", 40);
+        RescueOperator operator1 = new RescueOperator("O1", "Ana");
+        RescueOperator operator2 = new RescueOperator("O2", "Luis");
+        center.addDrone(drone1);
+        center.addDrone(drone2);
+        center.addOperator(operator1);
+        center.addOperator(operator2);
+        Mission mission1 = center.assignMission("O1", "D1", "Downtown", 30);
+        Mission mission2 = center.assignMission("O2", "D2", "Uptown", 20);
+        center.completeMission(mission1.getId());
+        
+        assertEquals(MissionStatus.ACTIVE, mission2.getStatus());
+        assertFalse(drone2.isAvailable());
     }
 }
