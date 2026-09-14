@@ -36,7 +36,10 @@ public class RescueCenter {
      * @param drone drone to register.
      * @return true if it was registered; false otherwise.
      */
-    public boolean addDrone(Drone drone) {
+   public boolean addDrone(Drone drone) {
+    if (drone == null) {
+        return false;
+    }
     drones.put(drone.getId(), drone);
     return true;
 }
