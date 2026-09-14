@@ -86,6 +86,9 @@ public class RescueCenter {
     if (drone == null) {
         throw new IllegalArgumentException("Drone does not exist: " + droneId);
     }
+    if (!drone.isAvailable()) {
+        throw new IllegalStateException("Drone is already busy: " + droneId);
+    }
 
     Mission mission = new Mission(
             generateMissionId(),
