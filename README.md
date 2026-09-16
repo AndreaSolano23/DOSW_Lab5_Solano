@@ -27,6 +27,14 @@ SkyRescue coordina drones que apoyan operaciones de emergencia en una ciudad, tr
 
 **REFACTOR:** se extrajo el método `isInvalid(Drone drone)` para agrupar las validaciones de `drone == null`, `drone.getId() == null` y `drone.getId().isBlank()`, eliminando la repetición de tres condiciones separadas dentro de `addDrone`.
 
+**Antes:**
+
+![Código antes del refactor](docs/evidence/refactor-before.png)
+
+**Después:**
+
+![Código después del refactor](docs/evidence/refactor-after.png)
+
 ## Cobertura
 
 ### Primera ejecución
@@ -47,6 +55,9 @@ Cobertura de líneas alcanzada: **88%** (mínimo requerido: 85%), verificada aut
 - Cobertura reportada: 85.8%
 - Security: A (0 issues) · Reliability: A (0 issues) · Maintainability: A (0 issues) · Duplications: 0.0%
 - Se corrigieron los 3 issues detectados en el primer análisis: 2 relacionados con especificar explícitamente la zona horaria en `LocalDateTime.now()`, y 1 relacionado con una lambda de prueba con más de una invocación que podía lanzar excepción.
+
+> Nota: JaCoCo reporta 88% de cobertura de líneas; SonarQube reporta 85.8% 
+> ya que combina cobertura de líneas y de condiciones en un solo indicador.
 
 ## Pull Requests
 
