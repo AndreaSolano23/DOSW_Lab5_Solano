@@ -39,7 +39,8 @@ SkyRescue coordina drones que apoyan operaciones de emergencia en una ciudad, tr
 
 ### Primera ejecución
 
-![Cobertura inicial](docs/evidence/coverage-first.png)
+<img width="1600" height="337" alt="image" src="https://github.com/user-attachments/assets/cbbfe9f7-81f2-4f80-aa1d-9eb6fccb8616" />
+
 
 ### Cobertura final
 
