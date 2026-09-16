@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * Coordinates drones, operators and emergency missions.
@@ -91,7 +92,7 @@ public class RescueCenter {
             distanceKm,
             drone,
             operator,
-            LocalDateTime.now(),
+            LocalDateTime.now(ZoneId.systemDefault()), 
             MissionStatus.ACTIVE);
 
     drone.setAvailable(false);
@@ -168,7 +169,7 @@ private void validateAssignment(
         }
         
         mission.setStatus(MissionStatus.COMPLETED);
-        mission.setEndDate(LocalDateTime.now());
+        mission.setEndDate(LocalDateTime.now(ZoneId.systemDefault()));
         mission.getDrone().setAvailable(true);
         
         return mission;

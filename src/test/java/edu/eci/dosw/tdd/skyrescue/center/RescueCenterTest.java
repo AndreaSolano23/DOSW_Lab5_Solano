@@ -158,10 +158,9 @@ class RescueCenterTest {
         center.addDrone(drone);
         center.addOperator(operator);
         Mission mission = center.assignMission("O1", "D1", "Downtown", 30);
-        center.completeMission(mission.getId());
-        
-        assertThrows(IllegalStateException.class, () ->
-        center.completeMission(mission.getId()));
+        String missionId = mission.getId();
+        center.completeMission(missionId);
+        assertThrows(IllegalStateException.class, () -> center.completeMission(missionId));
     }
 
     @Test
